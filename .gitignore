@@ -1,0 +1,34 @@
+#smieci z build
+build/*
+
+#keep makefile jako .gitkeep
+!build/Makefile
+
+#exec/comile
+*.o
+*.out
+*.exe
+
+
+#vscode config
+*.json
+.vscode/*
+
+#plik z danymi
+DATA/*
+*.zip
+
+#test
+test.cpp
+main1.cpp
+
+#doxygen
+html/*
+latex/*
+xml/*
+rtf/*
+man/*
+*.tmp
+*.tag
+doxygen_objdb_*.tmp
+doxygen_errors.log
