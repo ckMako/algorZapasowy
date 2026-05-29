@@ -52,7 +52,7 @@ struct reblNode {
     T data; //pole data
     int key; //kopia elementu z data
 
-    Kolor color=Kolor::red; //inicjalizujemy val, zeby uniknac bledow
+    Kolor color=Kolor::red; //inicjalizujemy val, zeby uniknac smiieci z pamieci
     reblNode<T>* parent;
     reblNode<T>* left;
     reblNode<T>* right;

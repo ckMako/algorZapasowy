@@ -32,3 +32,4 @@ man/*
 *.tag
 doxygen_objdb_*.tmp
 doxygen_errors.log
+# Doxyfile
