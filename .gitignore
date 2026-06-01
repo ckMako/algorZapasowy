@@ -17,6 +17,7 @@ build/*
 #plik z danymi
 DATA/*
 *.zip
+!DATA/tetx.txt
 
 #test
 test.cpp
