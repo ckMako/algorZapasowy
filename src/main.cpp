@@ -18,9 +18,10 @@ int main(int argc, const char *argv[]) {
     std::cout<<"l rekordow: "<<ilosc<<std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
-    listaFilmow obj("/home/vboxuser/Desktop/Alg_Struct/algorSort/DATA/title.ratings.tsv/data.tsv",
+    listaFilmow obj("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/title.ratings.tsv/data.tsv",
         ilosc);
-    obj.addTitles("/home/vboxuser/Desktop/Alg_Struct/algorSort/DATA/title.basics.tsv/data.tsv");
+    std::cout<<"flaga1"<<std::endl;
+    obj.addTitles("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/title.basics.tsv/data.tsv");
     std::cout<<"liczba filmow w struct "<<obj.getSize()<<std::endl;
 
     
@@ -35,7 +36,7 @@ int main(int argc, const char *argv[]) {
 
     obj.usunPuste();
 
-    obj.PrintBrief();
+    // obj.PrintBrief();
 
 }
 

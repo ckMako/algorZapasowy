@@ -572,7 +572,8 @@ class reblBTS {
         T getValueById(int id)  {
             reblNode<T>* result = findKey(id);
             if(isNil(result)) throw std::runtime_error("nie znaleziono");
-            return result->data.getValue();
+            // return result->data.getValue();
+            return result->data;
         }
 
 

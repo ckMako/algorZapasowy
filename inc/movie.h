@@ -29,7 +29,7 @@ class movie {
 
     //tconst-wart ID IMBD
     // std::string tconst;
-    int tconst;
+    long tconst;
 
     double averageRating=0.0;
     int	numVotes=0;

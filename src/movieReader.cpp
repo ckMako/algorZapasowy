@@ -22,13 +22,14 @@ listaFilmow::listaFilmow(){}
 listaFilmow::listaFilmow(std::string plik, int ile){
     /*problem resize+aloc pamieci */
     ListaFilmow.reserve(ile);//na ilosc objektow
-    indeksy.reserve(ile);
-    for(int i =0; i<ile; i++) {
-        // indeksy.back();//do dodawania od indeksu koncowego
-        indeksy.push_back(i);
-    }
+
 
     this->addFromFile(plik, ile);
+
+    indeksy.resize(ListaFilmow.size());
+    for (int i = 0; i < (int)ListaFilmow.size(); i++) {
+        indeksy[i] = i;
+    }
 }
 
 //~listaFilmow(){}
@@ -74,7 +75,7 @@ void listaFilmow::addFromFile(std::string nazwa, int ile) {
     }
 }
 
-void listaFilmow::addTitles(std::string nazwa) {
+void listaFilmow::addTitles(std::string nazwa) { //plik z titles
     std::ifstream file(nazwa);
     if (!file.is_open())
         throw std::runtime_error("Nie mozna otworzyc pliku: " + nazwa);
@@ -85,8 +86,8 @@ void listaFilmow::addTitles(std::string nazwa) {
     std::getline(file, line); 
 
     //counter
-    int counter=this->ListaFilmow.size();
-    while (std::getline(file, line) && counter > 1) {
+    // int counter=this->ListaFilmow.size();
+    while (std::getline(file, line)) { 
         std::stringstream ss(line);
 
         std::getline(ss, tmp, '\t');  // tconst
@@ -99,12 +100,16 @@ void listaFilmow::addTitles(std::string nazwa) {
         // std::string title = tmp;
 
         titleTree.insert(title, tconst);
-        counter--;
+        // counter--;
     }
 
     // Uzupełnij tytuły w wektorze
     for (movie& m : ListaFilmow) {
-        m.setTitle(titleTree.getValueById(m.getTconst()));
+        try {
+            m.setTitle(titleTree.getValueById(m.getTconst()));
+        } catch(const std::runtime_error&) {
+            m.setTitle("N/A");
+        }
     }
 }
 
@@ -121,7 +126,7 @@ void listaFilmow::usunPuste() {
 
 /*gettery i settery*/
 
-    int listaFilmow::getSize() const{
+int listaFilmow::getSize() const{
         return ListaFilmow.size();
     }
 
