@@ -70,33 +70,33 @@ class reblBTS {
             root->color = Kolor::black;
             root->left=NIL;
             root->right=NIL;
-            root->parent=tmp;
+            root->parent=NIL;
             size++;
             return;
         }
-        while (!isNil(tmp))//chyba while moze miec po prostu warunek zawsze true
+        while (!isNil(tmp))//alternatywnie true
         {
-            if (tmp->key > argKey) {
+            if (tmp->key > argKey) { //dostajemy sie prez wskaznik ok 15-20 razy -> slow
             //go left
 
-            if(isNil(tmp->left)){ //insert w momencie znalezienia NIL
-                reblNode<T> *toIns = new reblNode<T>(argData, argKey); //dyn mem alloc - slow
-                toIns->color = Kolor::red; //default czerwony, 
-                tmp->left=toIns;
-                toIns->left=NIL;
-                toIns->right=NIL;
-                toIns->parent=tmp;
-                fixInsert(toIns); //napraw kolory
-                size++;
-                break;
-            } else {
-                tmp=tmp->left; //idz dalej jesli nie NIL
-            }
+                if(isNil(tmp->left)){ //insert w momencie znalezienia NIL
+
+                    reblNode<T> *toIns = new reblNode<T>(argData, argKey); //dyn mem alloc -> slow
+                    toIns->color = Kolor::red; //default czerwony, 
+                    tmp->left=toIns;
+                    toIns->left=NIL;
+                    toIns->right=NIL;
+                    toIns->parent=tmp;
+                    fixInsert(toIns); //napraw kolory
+                    size++;
+                    break;
+                } else {
+                    tmp=tmp->left; //idz dalej jesli nie NIL
+                }
             }
 
-            else {
+            else if(tmp->key < argKey) {
             //go right
-            //na prawo laduja tez warunki =, 
 
             if(isNil(tmp->right)){
                 reblNode<T> *toIns = new reblNode<T>(argData, argKey);
@@ -111,6 +111,9 @@ class reblBTS {
             }  else {
                 tmp=tmp->right;
             }
+        } else {
+            return; //STRATEGIA: wartosci = odrzucamy, nie wiadomo jak to obsluzyc w tym przypadku
+            //ew sprawdzamy czy Film ma przypisany title, jezeli ma to idziemy dalej w prawo ...
         }
         
     }}
@@ -125,77 +128,74 @@ class reblBTS {
      * default insert to red
      */
     void fixInsert(reblNode<T>* toFix) {
+        reblNode<T>* Dad=toFix->parent;
+        reblNode<T>* Dziad=Dad->parent;
+        reblNode<T>* Wuj=NIL;
+        bool czyDadPrawy;
 
-        //ograniczamy dostawanie sie przez wskazniki podczas wyszukiwania func
-        reblNode<T>* Dad = toFix->parent;
-        reblNode<T>* wujek=NIL;
 
-        // nowy node zawsze red, dopoki ojciec red-zmieniamy kolory(zatrzymuje sie na pierwszym black)
-        while (toFix->parent->color == Kolor::red) {
-
-            if(isRight(Dad)==99){
-                //do nothing
-                //parent to NIL
+        while( Dad->color == Kolor::red && toFix->color ==Kolor::red) { //tylko wtedy sa zaburzone war, root BLACK wiec nie trzeba sprawdzac
+            Dziad = Dad->parent;
+            //sprawdzam ktorym synem jest Dad
+            if(isRight(Dad)){
+                Wuj=Dziad->left;
+                czyDadPrawy=true;
+            } else {
+                Wuj=Dziad->right;
+                czyDadPrawy=false;
             }
-
-            // czy ojciec to LEFT child
-            else if (!isRight(Dad)) {
-                wujek = Dad->parent->right;
-
-                // VAR 1 : wujek jest RED, zmieniamy kolor na
-                if (wujek->color == Kolor::red) {
-                    toFix->parent->color          = Kolor::black;
-                    wujek->color              = Kolor::black;
-                    toFix->parent->parent->color  = Kolor::red;
-                    toFix = toFix->parent->parent; // idź wyżej
-                } 
-                else {
-                    // PRZYPADEK 2: z jest PRAWYM dzieckiem — rotacja w lewo
-                    if (toFix == toFix->parent->right) {
-                        toFix = toFix->parent;
-                        rotateLEFT(toFix);
+            
+            if(Wuj->color == Kolor::black) {
+                if(czyDadPrawy) {
+                    // Przypadek 2: toFix lewy syn → wyrównaj
+                    if(!isRight(toFix)) {
+                        rotateRIGHT(Dad);
+                        toFix = Dad;
+                        Dad   = toFix->parent;
+                        Dziad = Dad->parent;
                     }
-                    // PRZYPADEK 3: z jest LEWYM dzieckiem — rotacja w prawo
-                    toFix->parent->color         = Kolor::black;
-                    toFix->parent->parent->color = Kolor::red;
-                    rotateRIGHT(toFix->parent->parent);
-                }
-            } 
-            // czy ojciec to RIGHT child
-            else {
-                reblNode<T>* wujek = toFix->parent->parent->left;
-
-                // PRZYPADEK 1: wujek czerwony — przekoloruj
-                if (wujek->color == Kolor::red) {
-                    toFix->parent->color         = Kolor::black;
-                    wujek->color             = Kolor::black;
-                    toFix->parent->parent->color = Kolor::red;
-                    toFix = toFix->parent->parent;
-                } 
-                else {
-                    // PRZYPADEK 2: z jest LEWYM dzieckiem — rotacja w prawo
-                    if (toFix == toFix->parent->left) {
-                        toFix = toFix->parent;
-                        rotateRIGHT(toFix);
+                    // Przypadek 3
+                    Dad->color   = Kolor::black;
+                    Dziad->color = Kolor::red;
+                    rotateLEFT(Dziad);
+                } else {
+                    // Przypadek 2: lustrzany — toFix prawy syn → wyrównaj
+                    if(isRight(toFix)) {
+                        rotateLEFT(Dad);
+                        toFix = Dad;
+                        Dad   = toFix->parent;
+                        Dziad = Dad->parent;
                     }
-                    // PRZYPADEK 3: z jest PRAWYM dzieckiem — rotacja w lewo
-                    toFix->parent->color         = Kolor::black;
-                    toFix->parent->parent->color = Kolor::red;
-                    rotateLEFT(toFix->parent->parent);
+                    // Przypadek 3: lustrzany
+                    Dad->color   = Kolor::black;
+                    Dziad->color = Kolor::red;
+                    rotateRIGHT(Dziad);
                 }
+
+            } else {  //ten sam kolor co Dad -> naprawiamy kolory
+                Wuj->color=Kolor::black;
+                Dad->color=Kolor::black;
+
+                if(Dziad==root)
+                    return; //konczymy program Root zawsze BLACK
+                Dziad->color = Kolor::red;
+                toFix=Dziad; //skaczemy o 2
+                Dad=toFix->parent;
+
+        
             }
         }
-        // korzeń zawsze czarny
-        root->color = Kolor::black;
+        root->color=Kolor::black;
     }
 
 
     /**
      * @brief naprawia ilosc black node po usunieciu elem
-     * @param reblNode node zajmujacy miejsce
+     * @param reblNode parent usuwanego node
      */
-    void fixDelete(reblNode<T>* toFix) {
+    void fixDelete(/*reblNode<T>* toFix*/) { //TO DO
         //toFix 
+        reblNode<T>* toFix=NIL;
         while (toFix != root && toFix->color == Kolor::black)
         
         {
@@ -430,7 +430,8 @@ class reblBTS {
                 return 0;
 
             if (Dad->right==toCheck)
-                return 0;
+                return 1;
+            return 99;
 
         }
 
@@ -681,11 +682,66 @@ class reblBTS {
         }
 
     //TO DO
-    void removieGivenNodebyKey(reblNode<T>* TOREM){
-        //find min in right
-        //or find max in left
-        //becomes succesor
-        //repair COLORS
+    void removeGivenNodebyKey(int SeekKey){
+        reblNode<T>* curr=root;
+        while (!isNil(curr)) {
+            if(curr->key >SeekKey) {
+                //go left
+                curr=curr->left;
+            } else if(curr->key <SeekKey){
+                //go right
+                curr=curr->right;
+            } else {
+                //found
+                extract(curr);
+            }
+        } //didnt find key
+    }
+
+    void extract (reblNode <T>* ToRem) {
+        reblNode <T>* cop=NIL;
+        if(ToRem == root) {
+            cop=ToRem;
+        }
+        reblNode<T>* Dad=ToRem->parent;
+        reblNode <T>* Lson = ToRem->left;
+        reblNode <T>* Rson = ToRem->right;
+        bool RemCol = ToRem->color;
+
+        if(isNil(Lson)) { //jesli right to tez NIL to nic to nie zmienia
+            if(isRight(ToRem)) {
+                Dad->right=Rson;
+                delete ToRem;
+            } else {
+                Dad->left=Rson;
+                delete ToRem;
+            }
+            Rson->parent=Dad;
+            fixDelete(/*...*/); //nparaw kolor
+        } else if (isNil(Rson)) {
+            if(isRight(ToRem)) {
+                Dad->right=Lson;
+                delete ToRem;
+            } else {
+                Dad->left=Lson;
+                delete ToRem;
+            }
+            Lson->parent=Dad;
+            fixDelete(/*...*/); //nparaw kolor
+        } else { //posiada 2 synow
+            reblNode<T>* Succ=fMinNode(ToRem->right);
+            if(Succ->parent!=ToRem) {
+
+            }
+            Succ->parent->left=Succ->right;
+            Succ->right->parent=Succ->parent; //NIL do nawigacji
+            fixDelete(/*...*/);//napraw col po succesor
+            ToRem->data=Succ->data;
+            delete Succ;
+
+        }
+        //fix NIL
+
     }
 
     /**
