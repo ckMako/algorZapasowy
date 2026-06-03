@@ -180,6 +180,11 @@ void listaFilmow::sortowanie(const int arg){
         std::cout<<"quick sort"<<std::endl;
         quickSort(ListaFilmow, indeksy);
         break;
+
+    case 3:
+        std::cout<<"wstawianie "<<std::endl;
+        insertionSort(ListaFilmow, indeksy);
+        break;
     
     default:
         std::cout<<"Merge sort"<<std::endl;
@@ -233,6 +238,6 @@ void listaFilmow::saveToFile(std::string nazwa) {
 
 void listaFilmow::Mediana () {
     int indx = indeksy.size()/2;
-    std::cout<<"Mediana "<< indx<<' '<<ListaFilmow[indx].printBrief()<<std::endl;
+    std::cout<<"Mediana "<< indx<<' '<< ListaFilmow[indeksy[indx]].printBrief()<<std::endl;
 }
 

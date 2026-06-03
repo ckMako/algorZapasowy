@@ -24,19 +24,5 @@ void bubbleSort(std::vector<T>& arr) {
  * @param vector pointer na vect
  * @return sorted
  */
-template<class T>
-void insertionSort(std::vector<T>& arr) {
-    std::cout << "InsertionSort" << std::endl;
-    int n = arr.size();
-    for (int i = 1; i < n; ++i) {
-        T key = arr[i];          // T zamiast int
-        int j = i - 1;
-        while (j >= 0 && *arr[j] > *key) {  // dereferencja
-            arr[j+1] = arr[j];
-            j--;
-        }
-        arr[j+1] = key;
-    }
-}
-
+void insertionSort(std::vector<movie>& arr, std::vector<int>& indeksy);
 

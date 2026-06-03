@@ -12,8 +12,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-#optymalizacja -00, -01, -02, -03
-set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra")
+#optymalizacja -O0, -O1, -O2, -O3
+set(CMAKE_CXX_FLAGS "-O0 -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra")
 
 # // end Source
