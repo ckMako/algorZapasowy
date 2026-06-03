@@ -52,9 +52,9 @@ void listaFilmow::addFromFile(std::string nazwa, int ile) {
 
     //pass args
     std::string tmp;
-    int tconst;
-    double rating = 0.0;
-    int numVotes = 0;
+    std::string title;
+    // double rating = 0.0;
+    // int numVotes = 0;
 
     int counter = 0;
     while (std::getline(file, line) && counter < ile) {
@@ -64,12 +64,12 @@ void listaFilmow::addFromFile(std::string nazwa, int ile) {
         // rzutowanie na logn
         long tconst = std::stol(tmp.substr(2));  // "0000001"  =1 (long)
 
-        std::getline(ss, tmp, '\t');      // rating
-        rating = std::stod(tmp);
-        std::getline(ss, tmp, '\t');      // numVotes
-        numVotes = std::stoi(tmp);
+        std::getline(ss, tmp, '\t');      // titleType
 
-        ListaFilmow.push_back(movie(tconst, rating, numVotes));
+        std::getline(ss, tmp, '\t');      // title
+        title = tmp;
+
+        ListaFilmow.push_back(movie(tconst, title));
 
         counter++;
     }
@@ -113,11 +113,47 @@ void listaFilmow::addTitles(std::string nazwa) { //plik z titles
     }
 }
 
+void listaFilmow::addTOTitles(std::string nazwa) { //plik z ratings
+    std::ifstream file(nazwa);
+    if (!file.is_open())
+        throw std::runtime_error("Nie mozna otworzyc pliku: " + nazwa);
+
+    std::string line, tmp;
+    int tconst;
+    double rating=0.0;
+
+    // pomiń header
+    std::getline(file, line); 
+
+    //counter
+    // int counter=this->ListaFilmow.size();
+    while (std::getline(file, line)) { 
+        std::stringstream ss(line);
+
+        std::getline(ss, tmp, '\t');  // tconst
+        tconst = std::stol(tmp.substr(2));
+
+        std::getline(ss, tmp, '\t');  // average Rating
+        rating=std::stod(tmp);
+
+        ratingTree.insert(rating, tconst);
+        // counter--;
+    }
+
+    // Uzupełnij ratings w wektorze
+    for (movie& m : ListaFilmow) {
+        try {
+            m.setRating(ratingTree.getValueById(m.getTconst()));
+        } catch(const std::runtime_error&) {
+            m.setRating(0.0); //brak
+        }
+    }
+}
 
 void listaFilmow::usunPuste() {
     int licznik = 0;
     for (int m : indeksy) {
-        if (ListaFilmow[m].getTitle().empty()) {  // twój warunek
+        if (ListaFilmow[m].getTitle().empty()) {
             licznik++;
         }
     }

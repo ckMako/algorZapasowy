@@ -18,10 +18,10 @@ int main(int argc, const char *argv[]) {
     std::cout<<"l rekordow: "<<ilosc<<std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
-    listaFilmow obj("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/title.ratings.tsv/data.tsv",
+    listaFilmow obj("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/title.basics.tsv/data.tsv",
         ilosc);
     std::cout<<"flaga1"<<std::endl;
-    obj.addTitles("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/title.basics.tsv/data.tsv");
+    obj.addTOTitles("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/title.ratings.tsv/data.tsv");
     std::cout<<"liczba filmow w struct "<<obj.getSize()<<std::endl;
 
     

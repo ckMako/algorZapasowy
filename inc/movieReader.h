@@ -31,9 +31,12 @@ class listaFilmow {
     std::vector<int> indeksy; //to srtujemy; ListaFilmow[indeksy].setTitle
     // std::vector<movie*> ptrMovie //wiszace wskazniki przy relokacji(vector to dyn array)
 
+    //usuwamy indeksy z rating < 1.0
 
-    //do sortowania titles
     reblBTS<std::string> titleTree;
+
+    //do sortowania doubles
+    reblBTS<double> ratingTree;
 
     public:
 
@@ -69,6 +72,11 @@ class listaFilmow {
      * @param fileName nazwa pliku z titles
      */
     void addTitles(std::string nazwa);  
+
+    /**
+     * @brief Dodaj ratingi
+     */
+    void addTOTitles(std::string nazwa);
 
     void usunPuste();
 

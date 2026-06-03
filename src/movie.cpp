@@ -6,6 +6,11 @@ movie::movie(int arg1, double arg2, int arg3){
     numVotes=arg3;
 }
 
+movie::movie(int arg1, std::string arg2){
+    tconst=arg1;
+    title=arg2;
+}
+
 movie::movie() {
 
 }
@@ -25,6 +30,10 @@ std::string movie::getTitle () const {
 
 void movie::setTitle(std::string Title) {
     title=Title;
+}
+
+void movie::setRating(double arg) {
+    averageRating=arg;
 }
 
 std::string movie::printBrief()const{

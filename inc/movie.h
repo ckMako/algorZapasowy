@@ -49,6 +49,8 @@ class movie {
      * @param int l glosow
      */
     movie(int, double, int);
+    
+    movie(int arg1, std::string arg2);
     movie();
 
     // ~movie();
@@ -65,6 +67,11 @@ class movie {
      * @param string title
      */
     void setTitle(std::string);
+
+    /**
+     * @param double rating
+     */
+    void setRating(double);
 
     //gettery i settery
 
