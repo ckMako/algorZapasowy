@@ -29,12 +29,12 @@ int main(int argc, const char *argv[]) {
     auto czas = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     std::cout<<"czas zapisu: "<<czas.count()<<"ms"<<std::endl;
     obj.testSortowania(1);
+    obj.usunPuste();
     std::cout<<"Top 10: "<<std::endl;
     obj.PrintTop10();
     std::cout<<std::endl<<"Last 10: "<<std::endl;
     obj.PrintLast10();
-
-    obj.usunPuste();
+    obj.Mediana();
 
     obj.saveToFile("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/sorted.txt");
 

@@ -151,13 +151,13 @@ void listaFilmow::addTOTitles(std::string nazwa) { //plik z ratings
 }
 
 void listaFilmow::usunPuste() {
-    int licznik = 0;
-    for (int m : indeksy) {
-        if (ListaFilmow[m].getTitle().empty()) {
-            licznik++;
-        }
-    }
-    std::cout<<"liczna filmow bez tyt: " <<licznik<<std::endl;
+    int licznik = indeksy.size();
+    auto ne = std::remove_if(indeksy.begin(), indeksy.end(),
+        [&](int m) {
+            return ListaFilmow[m].getAverageRating() == 0.0;
+        });
+    indeksy.erase(ne, indeksy.end());
+    std::cout << "liczba filmow bez ratingu: " << (licznik - indeksy.size()) << std::endl;
 }
 
 /*gettery i settery*/
@@ -229,5 +229,10 @@ void listaFilmow::saveToFile(std::string nazwa) {
              << m.getTitle() << "\t"
              << m.getTconst() << "\n";
     }
+}
+
+void listaFilmow::Mediana () {
+    int indx = indeksy.size()/2;
+    std::cout<<"Mediana "<< indx<<' '<<ListaFilmow[indx].printBrief()<<std::endl;
 }
 

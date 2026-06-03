@@ -7,6 +7,8 @@
 #include "SORT/algorytmySortowania.h"
 #include "BST/rebl.h"
 
+#include <algorithm> //do usuwania
+
 //iterowanie vector
 // for (int x : v)        // kopia każdego elementu
 // for (int& x : v)       // referencja, można modyfikować element
