@@ -218,3 +218,16 @@ void listaFilmow::PrintTop10() {
 
 void listaFilmow::top3Cat(const int arg, int typ) {}
 
+void listaFilmow::saveToFile(std::string nazwa) {
+    std::ofstream file(nazwa);
+    if (!file.is_open())
+        throw std::runtime_error("Nie mozna otworzyc pliku: " + nazwa);
+    
+    for (int i = indeksy.size() - 1; i >= 0; i--) {
+        movie& m = ListaFilmow[indeksy[i]];
+        file << m.getAverageRating() << "\t"
+             << m.getTitle() << "\t"
+             << m.getTconst() << "\n";
+    }
+}
+

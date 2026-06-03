@@ -117,6 +117,8 @@ class listaFilmow {
      * @brief wyswietl mediane danych
      */
     void Mediana();
+
+    void saveToFile(std::string nazwa);
     
 };
 

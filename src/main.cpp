@@ -36,6 +36,8 @@ int main(int argc, const char *argv[]) {
 
     obj.usunPuste();
 
+    obj.saveToFile("C:/Users/Dell/Desktop/MaciekTmpDESK/Proj/algorZapasowy/DATA/sorted.txt");
+
     // obj.PrintBrief();
 
 }
